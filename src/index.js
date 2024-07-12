@@ -26,15 +26,19 @@ app.use(express.static(path.join(__dirname, '../public')));
     res.render('signup');
  })
 
+//  define a route to handle post request to '/signup'
+
  app.post('/signup', async (req, res) => {
-   const data = {
+   const data = {  
       name: req.body.username,
       password: req.body.password
-   }
+   };
+
+// checking for existing user
 try{
    const existingUser = await collection.findOne({name: data.name});
    if(existingUser){
-      res.send('User aleardy exists, Please choose a different username.')
+      res.send('User already exists, Please choose a different username.')
       // return;
    } else {
    const saltRounds = 10;
@@ -53,11 +57,12 @@ try{
 });
 
 //  login user -->
+// define route for handles post req
 app.post('/login', async (req,res) => {
    try {
       const check = await collection.findOne({name: req.body.username})
      if(!check) { 
-      res.send('User name cannot found')
+      res.send('Username cannot found')
       return;
    }
 
@@ -71,7 +76,7 @@ app.post('/login', async (req,res) => {
 }catch (error){
    console.log(error);
    res.status(500).send('Wrong detials')
-}
+}k
 });
 
 
